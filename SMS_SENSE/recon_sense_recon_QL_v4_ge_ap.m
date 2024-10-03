@@ -8,7 +8,7 @@ clear;close all;clc;
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/functions_recon_nomapVBVD'))
 addpath(genpath('/data/pnl/home/ql087/Joint_Loraks_Toolbox'))
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Espirit_matlab_only_toolbox'))
-addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/SMS_SENSE'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Harmonization_MB_Recon/SMS_SENSE'))
 addpath(genpath('/data/pnl/home/ql087/orchestra-sdk-2.1-1.matlab'))
 addpath(genpath('/data/pnl/home/ql087/arrShow-develop'));
 addpath(genpath('/data/pnl/home/ql087/Bruker_2022'));

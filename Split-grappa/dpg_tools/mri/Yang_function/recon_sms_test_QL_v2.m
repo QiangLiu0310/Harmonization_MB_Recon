@@ -7,8 +7,8 @@ addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/functions_re
 addpath(genpath('/data/pnl/home/ql087/data_processing/read_meas_dat__20140924112147'))
 addpath(genpath('/data/pnl/home/ql087/data_processing/FID-A-master'))
 
-file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_09_10_BWH_prisma_sub4/2024_09_10_Prisma_raw/';
-file_name='meas_MID00835_FID37593_Diffusion_SMS2_R2_AP.dat';
+file_path = '/data/pnlx/home/ql087/data_bwh/bay6_ghost_correction_toolbox/data/';
+file_name='meas_MID4640_ep2d_bold_2mm_R2_FID160802.dat';
 
 tic
     dat = mapVBVD([file_path, file_name]);
@@ -24,7 +24,7 @@ if isempty(prot.aflRegridADCDuration)
     prot.aflRegridADCDuration = dat{2}.hdr.Meas.aflRegridADCDuration(1);
 end
 
-[raw,coil]=recon_sms_std_xa30_tmp(dat,prot);
+[raw,coil]=recon_sms_std_xa30_tmp_1(dat,prot);
 
 
 % write to cfl for bart
@@ -32,14 +32,14 @@ end
 % kspace_data: N-dimensional matrix with slices in the 13th dimension
 % coil_sens_maps: N-dimensional matrix with slices in the 13th dimension
 
-kspace_data = permute(raw,[1 3 2 5 6 7 8 9 10 11 12 13 4]);
-coil_sens_maps=permute(coil,[1 2 4 5 6 7 8 9 10 11 12 13 3]);
-
-% Write k-space data to CFL file
-writecfl('kspace_data', kspace_data);
-
-% Write coil sensitivity maps to CFL file
-writecfl('coil_sens_maps', coil_sens_maps);
+% kspace_data = permute(raw,[1 3 2 5 6 7 8 9 10 11 12 13 4]);
+% coil_sens_maps=permute(coil,[1 2 4 5 6 7 8 9 10 11 12 13 3]);
+% 
+% % Write k-space data to CFL file
+% writecfl('kspace_data', kspace_data);
+% 
+% % Write coil sensitivity maps to CFL file
+% writecfl('coil_sens_maps', coil_sens_maps);
 
 
 

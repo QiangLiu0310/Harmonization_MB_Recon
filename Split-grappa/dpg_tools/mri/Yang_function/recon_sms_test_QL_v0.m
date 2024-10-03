@@ -6,9 +6,8 @@ addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/functions_re
 addpath(genpath('/data/pnl/home/ql087/data_processing/read_meas_dat__20140924112147'))
 addpath(genpath('/data/pnl/home/ql087/data_processing/FID-A-master'))
 
-file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_03_28_siemens_sub2/';
-file_name='meas_MID00894_FID32122_Diffusion_SMS2_R2_AP_scan2.dat';
-
+file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_09_14_bwh_prisma_sub5/2024_09_14_bwh_prisma_sub5_raw/';
+file_name='meas_MID00714_FID40250_Diffusion_SMS2_R2_AP.dat';
 
 tic
     dat = mapVBVD([file_path, file_name]);

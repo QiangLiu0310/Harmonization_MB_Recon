@@ -5,16 +5,16 @@
 
 clear;close all;clc;
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/functions_recon_nomapVBVD'))
-addpath(genpath('/data/pnl/home/ql087/data_processing/read_meas_dat__20140924112147'))
-addpath(genpath('/data/pnl/home/ql087/data_processing/FID-A-master'))
-addpath(genpath('/data/pnl/home/ql087/Joint_Loraks_Toolbox'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/read_meas_dat__20140924112147'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/FID-A-master'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Joint_Loraks_Toolbox'))
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Espirit_matlab_only_toolbox'))
-addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/SMS_SENSE'))
-
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Harmonization_MB_Recon/SMS_SENSE'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/sms_bart/bart-0.8.00/matlab'))
 %% extract the ref and img k-space data with mapVBVD, after EPI correction
 
-file_path = '/rfanfs/pnl-zorro/home/ql087/2024_04_09_bwh_prisma_sub3/';
-file_name='meas_MID00665_FID37608_Diffusion_SMS2_R2_PA.dat';
+file_path = '/run/user/5446630/gvfs/smb-share:server=eristwofs.partners.org,share=pnlx/home/ql087/data_bwh/product_scan_rescan/2024_09_14_bwh_prisma_sub5/2024_09_14_bwh_prisma_sub5_raw/';
+file_name='meas_MID00716_FID40252_Diffusion_SMS2_R2_PA.dat';
 
 
 dat = mapVBVD([file_path, file_name]);
@@ -75,7 +75,6 @@ for iReps =1:1
     toc
 
 end
-
 
 sens=permute(sens,[1 2 14 3 5:13 4]);
 kdata=permute(kdata,[1 2 14 3 5:13 4]);

@@ -8,7 +8,7 @@ clear;close all;clc;
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/functions_recon_nomapVBVD'))
 addpath(genpath('/data/pnl/home/ql087/Joint_Loraks_Toolbox'))
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Espirit_matlab_only_toolbox'))
-addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/SMS_SENSE'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Harmonization_MB_Recon/SMS_SENSE'))
 addpath(genpath('/data/pnl/home/ql087/orchestra-sdk-2.1-1.matlab'))
 addpath(genpath('/data/pnl/home/ql087/arrShow-develop'));
 addpath(genpath('/data/pnl/home/ql087/Bruker_2022'));
@@ -18,13 +18,13 @@ addpath(genpath('/data/pnl/home/ql087/Pulseq_Mprage_Recon_Toolbox'));
 
 
 %% extract the ref and img k-space data 
-data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_03_28_ge_sub2/Exam16351/Series12/'; % image
+data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_08_21_ge_sub1/Exam18233/Series9/'; % image
 % data_path1='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_04_09_ge_sub3/Exam16500/Series5/'; % ref
 %% read GE MB2 data
 
 cd(data_path);
 disp('Currently in directory rawdata');
-tmp=strcat(data_path,'ScanArchive_LONGWOOD30MR2_20240329_213545213.h5');
+tmp=strcat(data_path,'ScanArchive_LONGWOOD30MR2_20240821_220823649.h5');
 pfile = fullfile(tmp);
 archive = GERecon('Archive.Load', pfile);
 xRes = archive.DownloadData.rdb_hdr_rec.rdb_hdr_da_xres;
@@ -116,7 +116,7 @@ clear t_trgt Kimage_short
 
 %% extract the sense map from the ref data itself using ESPIRIT
 
-load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_03_28_ge_sub2/Exam16351/Series12/surfaceImages.mat') 
+load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_08_21_ge_sub1/Exam18233/Series9/surfaceImages.mat')
  img_patref=permute(surfaceImages,[1 2 4 3]);
 
 num_acs = 24;

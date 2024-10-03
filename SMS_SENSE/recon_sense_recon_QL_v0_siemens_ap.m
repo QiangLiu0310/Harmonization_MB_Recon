@@ -10,12 +10,12 @@ addpath(genpath('/data/pnl/home/ql087/data_processing/read_meas_dat__20140924112
 addpath(genpath('/data/pnl/home/ql087/data_processing/FID-A-master'))
 addpath(genpath('/data/pnl/home/ql087/Joint_Loraks_Toolbox'))
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Espirit_matlab_only_toolbox'))
-addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/SMS_SENSE'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Harmonization_MB_Recon/SMS_SENSE'))
 
 %% extract the ref and img k-space data with mapVBVD, after EPI correction
 
-file_path = '/rfanfs/pnl-zorro/home/ql087/2024_04_09_bwh_prisma_sub3/';
-file_name='meas_MID00663_FID37606_Diffusion_SMS2_R2_AP.dat';
+file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_03_28_siemens_sub2/';
+file_name='meas_MID00877_FID32105_Diffusion_SMS2_R2_AP.dat';
 
 
 dat = mapVBVD([file_path, file_name]);
@@ -36,7 +36,7 @@ img_patref=ifft2c3(refscan_first_tmp);
 
 num_acs = 24;% 36
 kernel_size = [6,6];
-eigen_thresh = 0.9;			% for mask size 0.8
+eigen_thresh = 0.8;			% for mask size 0.8
 
 receive = zeross(size(img_patref));
 delete(gcp('nocreate'))
@@ -66,7 +66,7 @@ kspace_cor_tmp=zeros(size(img_k,1), size(img_k,2)*AccY+36, size(img_k,3),size(im
 img_recon=zeros(size(img_k,1), size(img_k,1), NSlc, NRep);
 
 
-for iReps =1:NRep
+for iReps =3:3%NRep
     % zero-pad for the partial Fourier part
     pf = prot.ucPhasePartialFourier;
     PE_raw= size(kspace_cor,2);
@@ -82,19 +82,10 @@ for iReps =1:NRep
     [img_recon(:,:,:,iReps) ] = recon_SMS_data_XCLv3_parfor(squeeze(kspace_cor_tmp(:,:,:,:,iReps)), ky_idx, sens_gre,AccY, AccZ,PhaseShiftBase,show_mercy);
     toc
     disp(iReps);
-    % apodization to improve SNR and reduce gibbs ringing
-%     apodization_para = 0.2;
-%     if apodization_para > 0
-%         kcomb = mrir_fDFT_freqencode(mrir_fDFT_phasencode(img_recon));
-%         kapodize = mrir_filter_raw_apodize_1d( mrir_filter_raw_apodize_1d(kcomb, 1, apodization_para),  2, apodization_para) ;
-%         img_recon = mrir_iDFT_freqencode(mrir_iDFT_phasencode(kapodize));
-%     end
-% 
-%     img_recon = single(img_recon);
 end
 
 
-save('ap_scan2_sense.mat','img_recon')
+save('ap_scan1_sense.mat','img_recon')
 
 
 

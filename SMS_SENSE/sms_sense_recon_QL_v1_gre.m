@@ -9,7 +9,7 @@ addpath(genpath('/data/pnl/home/ql087/data_processing/read_meas_dat__20140924112
 addpath(genpath('/data/pnl/home/ql087/data_processing/FID-A-master'))
 addpath(genpath('/data/pnl/home/ql087/Joint_Loraks_Toolbox'))
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Espirit_matlab_only_toolbox'))
-addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/SMS_SENSE'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Harmonization_MB_Recon/SMS_SENSE'))
 
 %% extract the ref and img k-space data with mapVBVD, after EPI correction
 file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_03_15_bwh_prisma_phantom/raw/';

@@ -19,14 +19,16 @@ addpath(genpath('/rfanfs/pnl-zorro/home/ql087/sms_bart/bart-master'));
 
 
 %% extract the ref and img k-space data
-data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_04_09_ge_sub3/Exam16500/Series8/'; % image
+data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_10_01_bwh_ge_sub5/Exam18772/Series2/'; % image
 %% read GE MB2 data
 
 cd(data_path);
 disp('Currently in directory rawdata');
-tmp=strcat(data_path,'ScanArchive_LONGWOOD30MR2_20240409_213322272.h5');
+tmp=strcat(data_path,'ScanArchive_LONGWOOD30MR2_20241001_200202505.h5');
 pfile = fullfile(tmp);
 archive = GERecon('Archive.Load', pfile);
+
+% Scan parameters
 xRes = archive.DownloadData.rdb_hdr_rec.rdb_hdr_da_xres;
 yRes = archive.DownloadData.rdb_hdr_rec.rdb_hdr_da_yres - 1;
 stop = archive.DownloadData.rdb_hdr_rec.rdb_hdr_dab.stop_rcv;
@@ -37,23 +39,73 @@ phs = archive.Passes; % number of phases
 pass = 1;
 zRes = archive.SlicesPerPass(pass);
 
-kspace = complex(zeros(xRes,  nChannels, yRes, zRes));
 
-for i = 1:archive.ControlCount
+% Scan parameters
+SA_head =  archive.DownloadData.rdb_hdr_rec;
+mydiff_head.MB = SA_head.rdb_hdr_mb_factor;
+mydiff_head.total_slice = SA_head.rdb_hdr_nslices;
+mydiff_head.pass = SA_head.rdb_hdr_npasses;
+mydiff_head.diffdir= SA_head.rdb_hdr_numdifdirs;
+mydiff_head.logic_slice = mydiff_head.total_slice / mydiff_head.pass;
+mydiff_head.b0pass= mydiff_head.pass-mydiff_head.diffdir;
+mydiff_head.tensor= SA_head.rdb_hdr_user11;
+mydiff_head.ms= SA_head.rdb_hdr_ileaves;
+mydiff_head.ExamNumber= archive.ExamNumber;
+mydiff_head.pcref_start= SA_head.rdb_hdr_pcref_start;
+mydiff_head.pcref_stop= SA_head.rdb_hdr_pcref_stop;
+mydiff_head.noise_cal = '';
+mydiff_head.asset_cal = '';
+mydiff_head.raw_cal = '';
+mydiff_head.slthick= archive.DownloadData.rdb_hdr_image.slthick;
+mydiff_head.slspace= archive.DownloadData.rdb_hdr_image.scanspacing;
+mydiff_head.fov= archive.DownloadData.rdb_hdr_image.dfov;
+mydiff_head.dx= archive.DownloadData.rdb_hdr_image.dim_X;
+mydiff_head.dy= archive.DownloadData.rdb_hdr_image.dim_Y;
+mydiff_head.day= SA_head.rdb_hdr_da_yres -1;
+mydiff_head.ctr_R= archive.DownloadData.rdb_hdr_image.ctr_R;
+mydiff_head.ctr_A= archive.DownloadData.rdb_hdr_image.ctr_A;
+mydiff_head.ctr_S= archive.DownloadData.rdb_hdr_image.ctr_S;
+mydiff_head.tableposition= archive.DownloadData.rdb_hdr_series.tablePosition;
+mydiff_head.im_size= SA_head.rdb_hdr_im_size;
+mydiff_head.RawHeader = SA_head;
+mydiff_head.se_no = archive.SeriesNumber;
+mydiff_head.se_desc= archive.DownloadData.rdb_hdr_series.se_desc;
+mydiff_head.bval = SA_head.rdb_hdr_bvalstab(1);
+mydiff_head.sliceorder1 = archive.DownloadData.rdb_hdr_series.start_ras;
+mydiff_head.sliceorder2 = archive.DownloadData.rdb_hdr_series.end_ras;
+mydiff_head.pepolar= archive.DownloadData.rdb_hdr_image.ihpepolar;
+mydiff_head.phasefov=SA_head.rdb_hdr_phase_scale;
 
-    control = GERecon('Archive.Next', archive);
+mydiff_head.geo_slice=mydiff_head.logic_slice/mydiff_head.MB;
+mydiff_head.ms=1;
 
-    if isfield(control, 'Data')
-        kspace(:,:,1:1:end,i) = squeeze(control.Data);
-    else
-        fprintf('%d\n', i);
+ph=1;
+count=0;
+for i=1:archive.ControlCount
+
+    currentControl = GERecon('Archive.Next', archive);
+    count=count +1;
+    if i==1
+        [xres ch yres]=size(currentControl.Data);
+        kspace_temp= single(zeros(xres, ch, yres*mydiff_head.ms,  mydiff_head.geo_slice, mydiff_head.pass));
+        kspace=complex(kspace_temp);
     end
-
+    if((currentControl.opcode==6) || (currentControl.opcode==14))
+        %  count=count+1
+        if ((currentControl.opcode==14) && (currentControl.frameType == 2))
+            %currentControl.bValueIndex+1
+            curr_dir= currentControl.diffDirIndex+1+ mydiff_head.b0pass;
+            kspace(:,:,currentControl.viewNum:currentControl.viewSkip:1,currentControl.sliceNum+1,curr_dir)=currentControl.Data;
+        else
+            kspace(:,:,currentControl.viewNum:currentControl.viewSkip:1,currentControl.sliceNum+1,ph)=currentControl.Data;
+        end
+        if((currentControl.sliceNum+1== mydiff_head.geo_slice) && ((abs(currentControl.viewSkip)*currentControl.numViews) == (currentControl.viewNum-1+abs(currentControl.viewSkip))) )
+            ph=ph+1;
+        end
+    end
 end
-GERecon('Archive.Close', archive);
-kspace=single(kspace);
-tmp=[1:2:90 91:size(kspace,4)];
-kspace=kspace(:,:,:,tmp);
+kspace = permute(kspace,[1 3 2 4 5]);
+clear kspace_temp
 
 %% image parameters
 NFreq_outres=146;
@@ -72,21 +124,23 @@ NRep=62;
 load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_04_09_ge_sub3/Exam16500/Series3/prot.mat')
 
 %% load rawdata
-raw=kspace(:,:,:,Ngroup+1:end);
+% raw=kspace(:,:,:,Ngroup+1:end);
 ref=kspace(:,:,4:6,1:Ngroup);
 ref=permute(ref,[1 3 2 4]);
 ref=repmat(ref,[1 1 1 1 NRep]);
-clear kspace
 
-raw=permute(raw,[1 3 2 4]);
-raw=reshape(raw,[326 57 44 46 62]);
-raw=raw(:,:,:,2:end,:);
+% raw=permute(raw,[1 3 2 4]);
+% raw=reshape(raw,[326 57 44 46 62]);
+% raw=raw(:,:,:,2:end,:);
 
-% ref=raw(:,1:3,:,:,:);
+raw=kspace(:,end:-1:1,:,:,2:end);
+ref=kspace(:,end:-1:1,:,:,1);
+ref=ref(:,4:6,:,:);
+ref=repmat(ref,[1 1 1 1 NRep]);
 raw=raw(:,4:end,:,:,:);
+
 raw(:,2:2:end,:,:,:)=flipdim(raw(:,2:2:end,:,:,:),1);
 ref(:,2:2:end,:,:,:)=flipdim(ref(:,2:2:end,:,:,:),1);
-clear tmp
 
 %% load vrgf dat0
 tmp=strcat(data_path, 'vrgf.dat');
@@ -121,7 +175,8 @@ clear t_trgt Kimage_short
 
 %% extract the sense map from the ref data itself using ESPIRIT
 
- load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_04_09_ge_sub3/Exam16500/Series8/surfaceImages.mat')
+load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_10_01_bwh_ge_sub5/Exam18772/Series2/surfaceImage.mat')
+ 
  img_patref=permute(surfaceImages,[1 2 4 3]);
 
 num_acs = 24;
@@ -163,7 +218,6 @@ for iReps =1:NRep
     PE = max(ceil(PE_raw/AccY)*AccY,prot.lPhaseEncodingLines);
     kspace_cor_tmp(:,:,:,:,iReps) = mrir_zeropad(kspace_cor(:,:,:,:,iReps),[0 PE-PE_raw 0 0 0 0 0 0 0 0 0],'pre');
     [kspace_cor_tmp(:,:,:,:,iReps), ky_idx]=detect_kyLines_QL_v1(kspace_cor_tmp(:,:,:,:,iReps) );
-%     delete(gcp('nocreate'))
     tic
     show_mercy = 2;
     [kdata,sens] = recon_SMS_data_XCLv3_parfor_QL_bart(squeeze(kspace_cor_tmp(:,:,:,:,iReps)) , ky_idx, sens_gre,AccY, AccZ,PhaseShiftBase,show_mercy);
@@ -172,10 +226,18 @@ for iReps =1:NRep
     disp(iReps)
 end
 
-cd /rfanfs/pnl-zorro/home/ql087/sms_bart/rawdata/
+kdata_dwi=single(kdata_dwi);
+
+cd /rfanfs/pnl-zorro/home/ql087/sms_bart/rawdata1/
 sens=permute(sens,[1 2 14 3 5:13 4]);
 writecfl('sens',sens);
+
+kdata_dwi=single(kdata_dwi);
+
+clearvars -except kdata_dwi
+
 kdata_dwi=permute(kdata_dwi,[1 2 14 3 5:13 4]);
+
 [FE, PE, ~, COIL, DWI, ~, ~, ~, ~, ~, ~, ~, ~, SLICE] = size(kdata_dwi);
 for dwi_idx = 1:DWI
     kdata_slice = kdata_dwi(:, :, :, :, dwi_idx, :, :, :, :, :, :, :, :, :);

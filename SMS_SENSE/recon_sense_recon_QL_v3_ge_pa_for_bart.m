@@ -8,7 +8,7 @@ clear;close all;clc;
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/functions_recon_nomapVBVD'))
 addpath(genpath('/data/pnl/home/ql087/Joint_Loraks_Toolbox'))
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Espirit_matlab_only_toolbox'))
-addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/SMS_SENSE'))
+addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Harmonization_MB_Recon/SMS_SENSE'))
 addpath(genpath('/data/pnl/home/ql087/orchestra-sdk-2.1-1.matlab'))
 addpath(genpath('/data/pnl/home/ql087/arrShow-develop'));
 addpath(genpath('/data/pnl/home/ql087/Bruker_2022'));
@@ -19,13 +19,13 @@ addpath(genpath('/rfanfs/pnl-zorro/home/ql087/sms_bart/bart-master/matlab'));
 
 
 %% extract the ref and img k-space data 
-data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_04_09_ge_sub3/Exam16500/Series9/'; % image
+data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_10_01_bwh_ge_sub5/Exam18771/Series3/'; % image
 
 %% read GE MB2 data
 
 cd(data_path);
 disp('Currently in directory rawdata');
-tmp=strcat(data_path,'ScanArchive_LONGWOOD30MR2_20240409_214015191.h5');
+tmp=strcat(data_path,'ScanArchive_LONGWOOD30MR2_20241001_194625992.h5');
 pfile = fullfile(tmp);
 archive = GERecon('Archive.Load', pfile);
 xRes = archive.DownloadData.rdb_hdr_rec.rdb_hdr_da_xres;
@@ -117,7 +117,7 @@ clear t_trgt Kimage_short
 
 %% extract the sense map from the ref data itself using ESPIRIT
 
-load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_04_09_ge_sub3/Exam16500/Series9/surfactImage.mat')
+load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_10_01_bwh_ge_sub5/Exam18771/Series3/surfaceImage.mat')
 img_patref=permute(surfaceImages,[1 2 4 3]);
 
 num_acs = 24;
@@ -171,7 +171,7 @@ end
 sens=permute(sens,[1 2 14 3 5:13 4]);
 kdata=permute(kdata,[1 2 14 3 5:13 4]);
 
-cd /rfanfs/pnl-zorro/home/ql087/sms_bart/
+cd /rfanfs/pnl-zorro/home/ql087/sms_bart/rawdata/
 writecfl('kdata',kdata);
 writecfl('sens',sens);
 
