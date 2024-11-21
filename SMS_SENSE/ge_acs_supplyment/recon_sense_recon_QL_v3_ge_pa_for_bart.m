@@ -20,6 +20,141 @@ addpath(genpath('/rfanfs/pnl-zorro/home/ql087/sms_bart/bart-master/matlab'));
 
 %% extract the ref and img k-space data 
 data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_08_21_ge_sub1/Exam18233/Series4/'; % image
+data_path1='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_08_21_ge_sub1/Exam18233/Series6/'; % ref
+
+currentDir = pwd;
+
+if ~strcmp(currentDir, data_path1)
+    cd(data_path1);
+end
+disp('Currently in directory ref scan');
+
+%% read GE 2-shot ref scan
+% image parameters
+NFreq_outres=146;
+NFreq_inres=330;
+Ncoils=44;
+NLocPhz=3;
+NImgLin=73;
+NSlc=90;
+SMS=2;
+Ngroup=NSlc*2;
+NRep=1;
+
+%% load rawdata
+
+tmp=strcat(data_path1,'ScanArchive_LONGWOOD30MR2_20240821_215638896.h5'); % the last one
+pfile = fullfile(tmp);
+archive = GERecon('Archive.Load', pfile);
+
+% Scan parameters
+xRes = archive.DownloadData.rdb_hdr_rec.rdb_hdr_da_xres;
+yRes = archive.DownloadData.rdb_hdr_rec.rdb_hdr_da_yres - 1;
+stop = archive.DownloadData.rdb_hdr_rec.rdb_hdr_dab.stop_rcv;
+start = archive.DownloadData.rdb_hdr_rec.rdb_hdr_dab.start_rcv;
+nChannels = stop - start + 1;
+phs = archive.Passes; % number of phases
+
+pass = 1;
+zRes = archive.SlicesPerPass(pass);
+
+kspace = complex(zeros(xRes,  nChannels, yRes, zRes));
+
+for i = 1:archive.ControlCount
+
+    control = GERecon('Archive.Next', archive);
+
+    if isfield(control, 'Data')
+        kspace(:,:,1:2:end,i) = squeeze(control.Data);
+    else
+        fprintf('%d\n', i);
+    end
+
+end
+GERecon('Archive.Close', archive);
+kspace=single(kspace);
+
+raw=kspace(:,:,1:2:end,:); 
+clear kspace
+raw(:,:,2:2:end,:)=flipdim(raw(:,:,2:2:end,:),1);
+raw=permute(raw,[1 3 2 4]);
+
+tmp=strcat(data_path1,'ScanArchive_LONGWOOD30MR2_20240821_215607314.h5'); % the first one
+pfile = fullfile(tmp);
+archive = GERecon('Archive.Load', pfile);
+
+% Scan parameters
+xRes = archive.DownloadData.rdb_hdr_rec.rdb_hdr_da_xres;
+yRes = archive.DownloadData.rdb_hdr_rec.rdb_hdr_da_yres - 1;
+stop = archive.DownloadData.rdb_hdr_rec.rdb_hdr_dab.stop_rcv;
+start = archive.DownloadData.rdb_hdr_rec.rdb_hdr_dab.start_rcv;
+nChannels = stop - start + 1;
+phs = archive.Passes; % number of phases
+
+pass = 1;
+zRes = archive.SlicesPerPass(pass);
+
+kspace = complex(zeros(xRes,  nChannels, yRes, zRes));
+
+for i = 1:archive.ControlCount
+
+    control = GERecon('Archive.Next', archive);
+
+    if isfield(control, 'Data')
+        kspace(:,:,1:2:end,i) = squeeze(control.Data);
+    else
+        fprintf('%d\n', i);
+    end
+
+end
+GERecon('Archive.Close', archive);
+kspace=single(kspace);
+kspace=kspace(:,:,:,1:2:end);
+ref=kspace;
+clear kspace
+ref(:,:,3:4:end,:)=flipdim(ref(:,:,3:4:end,:),1);
+ref=permute(ref,[1 3 2 4]);
+ref=ref(:,73:2:77,:,:);
+
+%% load vrgf dat0
+tmp=strcat(data_path1, 'vrgf.dat');
+fid = fopen(tmp, 'r');
+data = fread(fid, inf, 'float'); % 'float' specifies the data type
+fclose(fid);
+v=reshape(data,[330,146]);
+clear data
+
+sz_phasecor =[NFreq_outres NLocPhz Ncoils   Ngroup   NRep];
+sz_image =   [NFreq_outres  NImgLin Ncoils   Ngroup   NRep];
+
+% image data extraction
+vrgf_phasecor =reshape(v'*reshape(ref,[NFreq_inres Ncoils*NLocPhz*Ngroup*NRep]), sz_phasecor);
+vrgf_phasecor=permute(vrgf_phasecor,[1 3 2 4 5]);
+% imgscanPC dimension:
+vrgf_phasecor_ROp_ROn(:,:,1,:,:)= squeeze((vrgf_phasecor(:,:,1,:,:)+vrgf_phasecor(:,:,3,:,:))/2);
+vrgf_phasecor_ROp_ROn(:,:,2,:,:)= squeeze( vrgf_phasecor(:,:,2,:,:));
+
+vrgf_image=reshape(v'*reshape(raw,[NFreq_inres Ncoils*NImgLin*Ngroup*NRep]), sz_image);
+vrgf_image=permute(vrgf_image,[1 3 2 4]);
+Kimage= PhaseCorrect_yang(vrgf_phasecor_ROp_ROn,vrgf_image);
+
+tmp=permute(Kimage,[1 3 2 4]);
+tmp1=zeros(146,146,44,90);
+tmp1(:,1:2:end,:,:)=tmp(:,1:1:end,:,1:90);
+tmp1(:,2:2:end,:,:)= -tmp(:,1:1:end,:,91:180);
+clear tmp
+tmp1=single(tmp1);
+
+coil=tmp1; clear tmp1
+sli_idx=[1:2:NSlc 2:2:NSlc];
+[~,or]=sort(sli_idx);
+coil=coil(end:-1:1,:,:,or); 
+k_trgt = permute(coil,[1 2 4 3]); 
+
+clearvars -except k_trgt data_path data_path1
+sz = size(k_trgt);
+img_patref=fft2cc(k_trgt);
+
 
 %% read GE MB2 data
 
@@ -117,8 +252,8 @@ clear t_trgt Kimage_short
 
 %% extract the sense map from the ref data itself using ESPIRIT
 
-load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_08_21_ge_sub1/Exam18233/Series4/surfaceImages.mat')
-img_patref=permute(surfaceImages,[1 2 4 3]);
+% load('/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_08_21_ge_sub1/Exam18233/Series4/surfaceImages.mat')
+% img_patref=permute(surfaceImages,[1 2 4 3]);
 
 num_acs = 24;
 kernel_size = [6,6]; % [6 6]
@@ -171,7 +306,7 @@ end
 sens=permute(sens,[1 2 14 3 5:13 4]);
 kdata=permute(kdata,[1 2 14 3 5:13 4]);
 
-cd /rfanfs/pnl-zorro/home/ql087/sms_bart/rawdata1/
+cd /rfanfs/pnl-zorro/home/ql087/sms_bart/rawdata11/
 writecfl('kdata',kdata);
 writecfl('sens',sens);
 
