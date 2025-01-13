@@ -1,5 +1,6 @@
-Offline code for Multi-band 2 DWI rawdata recon  
-Toolboxes are required: 
+Offline code for Multi-band two diffusion MRI rawdata recon  
+
+# Toolboxes are required: 
 1. The Berkeley Advanced Reconstruction Toolbox (BART) toolbox https://mrirecon.github.io/bart/
 2. GE orchestra-sdk-2.1-1.matlab 
 3. Siemens READ_MEAS_PROT  read protocol from VB- and VD-style "meas.dat"
