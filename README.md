@@ -8,10 +8,10 @@ In the script, two recon algorithms are included:
 
 1. L1-ESPIRiT:
    Harmonization_MB_Recon/SMS_SENSE/, please run the scripts with the name *_bart and generate the cfl and hdr files as required by BART toolbox.
-2. Split-GRAPPA:
-   Siemens  
+2. Split-GRAPPA:  
+   # Siemens  
    Siemens_Split-grappa/dpg_tools/mri/Yang_function/recon_sms_test_QL_v0_runthis.m for both AP and PA data  
-   GE
+   # GE
    GE_Split_grappa/recon_ge_data_sg/recon_QL_mb2_ap_v5.m for AP data;
    GE_Split_grappa/recon_ge_data_sg/recon_QL_mb2_pa_v4.m for PA data.
 
