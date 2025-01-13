@@ -13,7 +13,7 @@ addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Harmonizatio
 addpath(genpath('/rfanfs/pnl-zorro/home/ql087/sms_bart/bart-0.8.00/matlab'))
 %% extract the ref and img k-space data with mapVBVD, after EPI correction
 
-file_path = '/run/user/5446630/gvfs/smb-share:server=eristwofs.partners.org,share=pnlx/home/ql087/data_bwh/product_scan_rescan/2024_09_14_bwh_prisma_sub5/2024_09_14_bwh_prisma_sub5_raw/';
+file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_09_14_bwh_prisma_sub5/2024_09_14_bwh_prisma_sub5_raw/';
 file_name='meas_MID00716_FID40252_Diffusion_SMS2_R2_PA.dat';
 
 
