@@ -8,7 +8,7 @@ Offline code for Multi-band two diffusion MRI rawdata recon
 # Recon algorithms and code:
 
 1. L1-ESPIRiT:
-   Harmonization_MB_Recon/SMS_SENSE/, please run the scripts with the name *_bart and generate the cfl and hdr files as required by BART toolbox.
+   SMS_SENSE/*_bart.m for generating the cfl and hdr files as required by BART toolbox, and recon Bart_scripts.
 2. Split-GRAPPA:  
    # Siemens  
    Siemens_Split-grappa/dpg_tools/mri/Yang_function/recon_sms_test_QL_v0_runthis.m for both AP and PA data  
