@@ -1,4 +1,4 @@
-Offline code for Multi-band 2 DWI rawdata recon
+Offline code for Multi-band 2 DWI rawdata recon  
 Toolboxes are required: 
 1. The Berkeley Advanced Reconstruction Toolbox (BART) toolbox https://mrirecon.github.io/bart/
 2. GE orchestra-sdk-2.1-1.matlab 
