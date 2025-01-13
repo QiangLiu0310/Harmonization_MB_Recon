@@ -5,7 +5,7 @@ Offline code for Multi-band two diffusion MRI rawdata recon
 2. GE orchestra-sdk-2.1-1.matlab 
 3. Siemens READ_MEAS_PROT  read protocol from VB- and VD-style "meas.dat"
    
-In the script, two recon algorithms are included:
+# Recon algorithms and code:
 
 1. L1-ESPIRiT:
    Harmonization_MB_Recon/SMS_SENSE/, please run the scripts with the name *_bart and generate the cfl and hdr files as required by BART toolbox.
@@ -16,7 +16,7 @@ In the script, two recon algorithms are included:
    GE_Split_grappa/recon_ge_data_sg/recon_QL_mb2_ap_v5.m for AP data;
    GE_Split_grappa/recon_ge_data_sg/recon_QL_mb2_pa_v4.m for PA data.  
 
-# Open-source dataset
+# Open-source dataset:
 
 The PA test data is available at: https://huggingface.co/datasets/QiangLiu0310/Harmonization_MB_Recon  
 
