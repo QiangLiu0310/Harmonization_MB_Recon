@@ -14,7 +14,9 @@ In the script, two recon algorithms are included:
    Siemens_Split-grappa/dpg_tools/mri/Yang_function/recon_sms_test_QL_v0_runthis.m for both AP and PA data  
    # GE
    GE_Split_grappa/recon_ge_data_sg/recon_QL_mb2_ap_v5.m for AP data;
-   GE_Split_grappa/recon_ge_data_sg/recon_QL_mb2_pa_v4.m for PA data.
+   GE_Split_grappa/recon_ge_data_sg/recon_QL_mb2_pa_v4.m for PA data.  
+
+# Open-source dataset
 
 The PA test data is available at: https://huggingface.co/datasets/QiangLiu0310/Harmonization_MB_Recon  
 
