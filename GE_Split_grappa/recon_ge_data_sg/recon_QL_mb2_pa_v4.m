@@ -14,8 +14,8 @@ addpath(genpath('/data/pnl/home/ql087/Bruker_2022'));
 addpath(genpath('/data/pnl/home/ql087/functions_recon'));
 addpath(genpath('/data/pnl/home/ql087/Pulseq_Mprage_Recon_Toolbox'));
 
-data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_10_01_bwh_ge_sub5/Exam18772/Series3/'; % image
-data_path1='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_10_01_bwh_ge_sub5/Exam18772/Series7/'; % ref
+data_path='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_04_09_ge_sub3/Exam16500/Series3/'; % image
+data_path1='/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_04_09_ge_sub3/Exam16500/Series5/'; % ref
 
 currentDir = pwd;
 
@@ -38,7 +38,7 @@ NRep=1;
 
 %% load rawdata
 
-tmp=strcat(data_path1,'ScanArchive_LONGWOOD30MR2_20241001_201741540.h5'); % the last one
+tmp=strcat(data_path1,'ScanArchive_LONGWOOD30MR2_20240409_212133980.h5'); % the last one
 pfile = fullfile(tmp);
 archive = GERecon('Archive.Load', pfile);
 
@@ -74,7 +74,7 @@ clear kspace
 raw(:,:,2:2:end,:)=flipdim(raw(:,:,2:2:end,:),1);
 raw=permute(raw,[1 3 2 4]);
 
-tmp=strcat(data_path1,'ScanArchive_LONGWOOD30MR2_20241001_201709922.h5'); % the first one
+tmp=strcat(data_path1,'ScanArchive_LONGWOOD30MR2_20240409_212102346.h5'); % the first one
 pfile = fullfile(tmp);
 archive = GERecon('Archive.Load', pfile);
 
@@ -158,7 +158,7 @@ sz = size(k_trgt);
 cd(data_path);
 disp('Currently in directory rawdata');
 
-tmp=strcat(data_path,'ScanArchive_LONGWOOD30MR2_20241001_200900830.h5');
+tmp=strcat(data_path,'ScanArchive_LONGWOOD30MR2_20240409_211609044.h5');
 pfile = fullfile(tmp);
 archive = GERecon('Archive.Load', pfile);
 
@@ -373,6 +373,6 @@ sli_idx=[46:90 1:45];
 img=img(:,:,or); 
 
 
-cd /data/pnlx/home/ql087/data_processing/2024_recon_reproducibility/sub5/ge/scan2/split_grappa/
-save('pa_scan2_sg_2.mat','img')
+cd /data/pnlx/home/ql087/data_processing/2024_recon_reproducibility/sub3/ge/scan1/split_grappa/
+save('pa_scan1_sg.mat','img')
 
