@@ -49,7 +49,7 @@ parfor ii_slc=1:size(kspace_cor,4) % parfor
     img_ap_collaps = repmat(img_ap_collaps, [AccZ,1,1,1,1])/AccZ;
     kspace_ap = fft2call(img_ap_collaps);
     kspace_ap = kspace_ap.* repmat(mask,[AccZ,1,1,1,1]);
-
+sa
     if AccZ>1
         for ii_temp=2:AccZ
             kspace_ap(ii_temp:AccZ:end,:,:,:,:) = 0;

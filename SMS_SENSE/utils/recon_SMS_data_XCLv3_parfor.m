@@ -80,9 +80,8 @@ parfor ii_slc=1:size(kspace_cor,4) % parfor
     img_sense=reshape(permute(reshape(img_sense,[N(1),AccZ,N(2),1]),[1,3,4,2]),[N(1),N(2),1*AccZ]);
 
     % shift back
-%     peshift=ceil(2*pi/ (2/3*pi)); %  (2/3*pi)
-    peshift=ceil(2*pi/ (-pi)); %  (2/3*pi)
-
+    % peshift=ceil(2*pi/ (-pi)); %  (2/3*pi)
+peshift=ceil(  (2/3*pi)); %  (2/3*pi)
     pes_index  = mod((1:AccZ)-1,2) ;
     for ii_temp=1:length(pes_index)
         img_sense(:,:,ii_temp) = circshift(img_sense(:,:,ii_temp),ceil(N(2)/(AccY*peshift))*pes_index(ii_temp),2);

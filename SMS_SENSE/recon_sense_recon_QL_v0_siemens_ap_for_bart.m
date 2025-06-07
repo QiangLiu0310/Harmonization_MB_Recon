@@ -15,9 +15,9 @@ addpath(genpath('/rfanfs/pnl-zorro/home/ql087/sms_bart/bart-master/matlab'))
 
 %% extract the ref and img k-space data with mapVBVD, after EPI correction
 
-file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_09_14_bwh_prisma_sub5/2024_09_14_bwh_prisma_sub5_raw/';
+file_path = '/data/pnlx/home/ql087/data_bwh/For_Hun/Siemens_Prisma_Phantom_Feb_09_2025/2025_02_09_bwh_phantom/';
 
-file_name='meas_MID00714_FID40250_Diffusion_SMS2_R2_AP.dat';
+file_name='meas_MID00059_FID139203_Diffusion_SMS2_R2_AP.dat';
 
 
 dat = mapVBVD([file_path, file_name]);
@@ -81,13 +81,13 @@ for iReps =1:NRep
     disp(iReps);
 end
 
-cd /rfanfs/pnl-zorro/home/ql087/sms_bart/rawdata1/
+cd /rfanfs/pnl-zorro/home/ql087/sms_bart/rawdata/
 
 sens=permute(sens,[1 2 14 3 5:13 4]);
 writecfl('sens',sens);
 
 kdata_dwi=single(kdata_dwi);
-kdata_dwi=permute(kdata_dwi,[1 2 14 3 5:13 4]);
+kdata_dwi=permute(kdata_dwi,[1 2 14 3 5:13 4]); 
 
 [FE, PE, ~, COIL, DWI, ~, ~, ~, ~, ~, ~, ~, ~, SLICE] = size(kdata_dwi);
 for dwi_idx = 1:DWI

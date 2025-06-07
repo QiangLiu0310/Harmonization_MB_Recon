@@ -13,8 +13,8 @@ addpath(genpath('/rfanfs/pnl-zorro/home/ql087/qiang_gSlider_data/lq/Harmonizatio
 
 %% extract the ref and img k-space data with mapVBVD, after EPI correction
 
-file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_03_28_siemens_sub2/';
-file_name='meas_MID00896_FID32124_Diffusion_SMS2_R2_PA_scan2.dat';
+file_path = '/data/pnlx/home/ql087/data_bwh/product_scan_rescan/2024_09_14_bwh_prisma_sub5/2024_09_14_bwh_prisma_sub5_raw/';
+file_name='meas_MID00716_FID40252_Diffusion_SMS2_R2_PA.dat';
 
 
 dat = mapVBVD([file_path, file_name]);
