@@ -14,7 +14,13 @@ Split Slice-GRAPPA
 1. GRAPPA ACS data extraction, EPI ramp sampling regrid, EPI Nyquist ghost correction: odd-even readout lines phase correction with linear phase correction (LPC), GRAPPA kernel training
 2. image data extraction, EPI ramp sampling regrid, Nyquist ghost correction with LPC, GRAPPA recon
 3. Partial Fourier recon with homodyne algorithm (reconhd)
-4. Coil combine with sum of square along the coil dimension.
+4. Coil combine with sum of square along the coil dimension
+
+L1-ESPIRiT
+1. extract the reference data for estimating the coil sensitivity maps (Siemens: EPI, GE: low resolution gre image).
+2. Siemens: ref data: EPI ramp sampling regrid, Nyquist ghost removal, FOV shift according to the MB2 data
+3. GE: ref data FOV chop, FOV shift according to the MB2 data
+4. use writecfl function to generate cfl files for BART
 
 ## 📂 Test Data
 
