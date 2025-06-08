@@ -8,6 +8,14 @@ This repository contains code and workflows for evaluating multi-band (MB) recon
 2. **SMS_SENSE with BART**  
 3. **Split Slice-GRAPPA**
 
+## 🧾 Reconstruction Steps
+
+Split Slice-GRAPPA
+1. GRAPPA ACS data extraction, EPI ramp sampling regrid, EPI Nyquist ghost correction: odd-even readout lines phase correction with linear phase correction (LPC), GRAPPA kernel training
+2. image data extraction, EPI ramp sampling regrid, Nyquist ghost correction with LPC, GRAPPA recon
+3. Partial Fourier recon with homodyne algorithm (reconhd)
+4. Coil combine with sum of square along the coil dimension.
+
 ## 📂 Test Data
 
 Available on Hugging Face:  
