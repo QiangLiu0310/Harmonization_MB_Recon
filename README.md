@@ -69,8 +69,6 @@ Available on Hugging Face:
 *Email:* qliu30@mgh.harvard.edu  
 *Affiliation:* Brigham and Women's Hospital
 
-## recently published Medical Physics paper:
-
 ## Recently Published *Medical Physics* Paper
 
 ```bibtex
