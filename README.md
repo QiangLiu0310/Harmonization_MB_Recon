@@ -85,6 +85,3 @@ Available on Hugging Face:
   doi = {10.1002/mp.70096}
 }
 
----
-
-*For any questions or contributions, feel free to open an issue or submit a pull request.*
