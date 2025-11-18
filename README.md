@@ -69,17 +69,20 @@ Available on Hugging Face:
 *Email:* qliu30@mgh.harvard.edu  
 *Affiliation:* Brigham and Women's Hospital
 
-## recent published Medical Physics paper:
+## recently published Medical Physics paper:
 
+## Recently Published *Medical Physics* Paper
+
+```bibtex
 @article{article,
-author = {Liu, Qiang and Zhu, Ante and Wang, Xiaoqing and Erdogmus, Deniz and Westin, Carl-Fredrik and O'Donnell, Lauren and Bilgic, Berkin and Ning, Lipeng and Rathi, Yogesh},
-year = {2025},
-month = {10},
-pages = {},
-title = {Effect of a consistent reconstruction algorithm on inter‐scanner reproducibility in diffusion MRI},
-volume = {52},
-journal = {Medical Physics},
-doi = {10.1002/mp.70096}
+  author = {Liu, Qiang and Zhu, Ante and Wang, Xiaoqing and Erdogmus, Deniz and Westin, Carl-Fredrik and O'Donnell, Lauren and Bilgic, Berkin and Ning, Lipeng and Rathi, Yogesh},
+  year = {2025},
+  month = {10},
+  pages = {},
+  title = {Effect of a consistent reconstruction algorithm on inter‐scanner reproducibility in diffusion MRI},
+  volume = {52},
+  journal = {Medical Physics},
+  doi = {10.1002/mp.70096}
 }
 
 ---
